@@ -1,8 +1,14 @@
 package pe.tallanes.sunat.model;
 
+import java.io.Serializable;
 
-public class DetalleComprobante  {
+
+public class DetalleComprobante implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int serie;
 	private String numero;
 	private int codigoArticulo;

@@ -7,7 +7,7 @@
 	xmlns:f="http://java.sun.com/jsf/core">
 	<h:form id="ing_cliente" prependId="false">
 		<p:panel header="DETALLE COMPROBANTE" styleClass="margen sin_borde">
-			<!-- <h:form id="frm_detalle" prependId="false"> -->			
+			  <h:form id="frm_detalle" prependId="false"> 		
 				 <div class="margen row">  
 					<h:outputText value="Tipo : " styleClass="derecha espacio_comp one sixth"/>
 					<h:outputText value="#{detalleComprobanteController.seleccionado.desSerie}" styleClass="derecha espacio_comp one sixth"/>
@@ -48,7 +48,7 @@
     				</p:dataTable>
 			     </div>
 			     <p:commandButton id="btnSalir" value="Salir" actionListener="#{detalleComprobanteController.salirDetalle}" icon="ui-icon-closethick"  />
-	        <!--</h:form>-->
+	        </h:form>
         </p:panel>
 	</h:form>
 </ui:composition>

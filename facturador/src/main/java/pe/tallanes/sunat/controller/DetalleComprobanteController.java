@@ -1,11 +1,13 @@
 package pe.tallanes.sunat.controller;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
+import javax.faces.bean.ViewScoped;
 
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortOrder;
@@ -22,8 +24,14 @@ import pe.tallanes.sunat.util.controller.InitController;
 
 
 @ManagedBean
-public class DetalleComprobanteController {
+@ViewScoped
+public class DetalleComprobanteController implements Serializable {
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
+
 	private static final Logger LOGGER = LoggerFactory.getLogger(DetalleComprobanteController.class);
 
 	@ManagedProperty(value = "#{InitController}")
@@ -42,6 +50,9 @@ public class DetalleComprobanteController {
 	@PostConstruct
 	public void cargaParametros(){
 		user = (Usuario)initController.getSessionVars().get("USUARIO");
+		seleccionado = (Comprobante)initController.getSessionVars().get("COMPROBANTE");
+		if(seleccionado != null)
+		  loadLazymodelDetalleComprobantes();
 	}
 	
 	public void loadLazymodelDetalleComprobantes() {
@@ -89,11 +100,6 @@ public class DetalleComprobanteController {
         } catch (Exception ex) {
             LOGGER.error("Error al cargar datos en el LazyDataModel.", ex);
         }
-	}
-
-	public void cargarDatosDetalle(){
-		loadLazymodelDetalleComprobantes();
-		Js.execute("PF('dlg_detalle').show()");
 	}
 	
 	public void salirDetalle(){

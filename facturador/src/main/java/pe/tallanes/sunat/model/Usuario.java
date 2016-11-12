@@ -3,7 +3,9 @@
  */
 package pe.tallanes.sunat.model;
 
+import java.io.Serializable;
 import java.util.Collection;
+
 
 
 
@@ -16,7 +18,7 @@ import org.springframework.security.core.userdetails.User;
  * @author Omar Yarleque 
  *
  */
-public class Usuario extends User {
+public class Usuario extends User implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private String nombre;

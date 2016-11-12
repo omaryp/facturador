@@ -1,9 +1,14 @@
 package pe.tallanes.sunat.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
-public class Comprobante {
+public class Comprobante implements Serializable{
 	
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private ComprobantePk id;
 	private String desSerie;
 	private String ruc;

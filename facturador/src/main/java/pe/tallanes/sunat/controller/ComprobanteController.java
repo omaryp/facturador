@@ -1,12 +1,13 @@
 package pe.tallanes.sunat.controller;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.event.AjaxBehaviorEvent;
+import javax.faces.bean.ViewScoped;
 
 import java.util.Map;
 
@@ -26,13 +27,20 @@ import pe.tallanes.sunat.util.controller.InitController;
 
 
 @ManagedBean
-public class ComprobanteController {
+@ViewScoped
+public class ComprobanteController implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(ComprobanteController.class);
 
 	@ManagedProperty(value = "#{InitController}")
 	private InitController initController;
 	private int tipoSeleccionado;
+	private Comprobante seleccionado;
 	private Date fechaEmision;
 	private List<Comprobante> comprobantes;
 	private List<TipoComprobante> tipos;
@@ -97,9 +105,10 @@ public class ComprobanteController {
             LOGGER.error(null, ex);
         }
 	}
-		
-	public void actualizaTabla(AjaxBehaviorEvent event) {
-		loadLazymodelComprobantes();		
+	
+	public void cargarComprobante(){
+		initController.getSessionVars().put("COMPROBANTE", seleccionado);
+		Js.execute("PF('dlg_detalle').show()");
 	}
 	
 	public void cargarComprobantes(){
@@ -166,5 +175,12 @@ public class ComprobanteController {
 	}
 	public void setTipoSeleccionado(int tipoSeleccionado) {
 		this.tipoSeleccionado = tipoSeleccionado;
+	}
+	public Comprobante getSeleccionado() {
+		return seleccionado;
+	}
+	public void setSeleccionado(Comprobante seleccionado) {
+		this.seleccionado = seleccionado;
 	}	
+	
 }

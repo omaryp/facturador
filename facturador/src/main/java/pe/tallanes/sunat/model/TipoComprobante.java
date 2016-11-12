@@ -1,7 +1,13 @@
 package pe.tallanes.sunat.model;
 
-public class TipoComprobante {
+import java.io.Serializable;
 
+public class TipoComprobante implements Serializable {
+
+	/**
+	 * 
+	 */
+	private static final long serialVersionUID = 1L;
 	private int codigo;
 	private String descripcion;
 	private int codigoSunat;
