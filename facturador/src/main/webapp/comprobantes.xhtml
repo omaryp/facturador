@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/plantilla/plantilla.xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+	<ui:define name="titulo">
+    	Consulta de comprobantes
+    </ui:define>
+	<ui:define name="cuerpo">
+		<p:panel header="Consulta  de comprobantes" styleClass="margen sin_borde">
+			<h:form id="frm_comprobante" prependId="false">
+				<div class="margen row">
+					<p:outputLabel value="Tipo de comprobante : " styleClass="negrita espacio_comp one seventh"  />
+					<p:selectOneMenu styleClass="two sevenths" value="#{comprobanteController.tipoSeleccionado}">
+						<f:selectItem itemLabel="Seleccione Tipo de comprobante" itemValue="-1" />
+						<f:selectItems value="#{comprobanteController.tipos}" var="tipo" itemLabel="#{tipo.descripcion}" itemValue="#{tipo.codigo}" />
+					</p:selectOneMenu>
+				</div>
+				<div class="margen row">
+					<p:outputLabel value=" Fecha de emisión : " styleClass="negrita espacio_comp one seventh" />
+        			<p:calendar value="#{comprobanteController.fechaEmision}" pattern="dd/MM/yyyy" mask="true" styleClass="two sevenths" />
+        			<p:commandButton icon="ui-icon-plus" title="cargar" actionListener="#{comprobanteController.cargarComprobantes}" value="Cargar" update="tbl_comprobantes,mensajes" styleClass="one seventh"/> 
+				</div>
+				<div class="margen">
+		    		<p:dataTable id="tbl_comprobantes" paginator="true" lazy="true" 
+			    		rows="10" paginatorPosition="bottom" 
+			    		emptyMessage="No hay coincidencias !!" var="comp"
+			    		value="#{comprobanteController.modelComprobante}"
+			    		paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
+				        <p:column headerText="Serie">
+				            <h:outputText value="#{comp.id.serie}" />
+				        </p:column>
+				        <p:column headerText="Número" >
+				            <h:outputText value="#{comp.id.numero}" />
+				        </p:column>
+				        <p:column headerText="Ruc">
+				            <h:outputText value="#{comp.ruc}" />
+				        </p:column>
+				        <p:column headerText="Moneda">
+				            <h:outputText value="#{comp.moneda}" />
+				        </p:column>
+				        <p:column headerText="Cliente">
+				            <h:outputText value="#{comp.cliente}" />
+				        </p:column>
+				        <p:column headerText="Valor venta">
+				            <h:outputText value="#{comp.valorVenta}" />
+				        </p:column>
+				        <p:column headerText="Impuesto">
+				            <h:outputText value="#{comp.impuesto}" />
+				        </p:column>
+				        <p:column headerText="Opciones">
+				            <p:commandButton type="button" icon="ui-icon-document" title="Ver detalle de comprobante" action="#{detalleComprobanteController.cargarDatosDetalle}" >
+				            	<f:setPropertyActionListener value="#{comp}" target="#{detalleComprobanteController.seleccionado}"/>
+				            </p:commandButton>
+				        </p:column>
+	    			</p:dataTable>
+		    	</div>
+		    	<p:dialog id="ver_detalle" showHeader="false" widgetVar="dlg_detalle" width="900">
+					<ui:include src="/formularios/frmDetalleComprobante.xhtml" />
+				</p:dialog>
+			</h:form>
+		</p:panel>
+		
+	</ui:define>
+</ui:composition>
