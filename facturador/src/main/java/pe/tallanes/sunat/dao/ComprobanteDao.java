@@ -4,17 +4,21 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import pe.tallanes.sunat.dao.util.Conexiones;
+import pe.tallanes.sunat.model.Comprobante;
+import pe.tallanes.sunat.model.ComprobantePk;
 
 public class ComprobanteDao {
-	private static final Logger LOGGER = LoggerFactory.getLogger(UsuarioDao.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(ComprobanteDao.class);
 	private static ComprobanteDao dao = null;
 	private ComprobanteDao(){}
 	
@@ -25,35 +29,74 @@ public class ComprobanteDao {
 		return dao;
 	}
 	
-	public Map<String, Object> listarComprobantes(Map<String, Object> params){
-		int tipoComprobante = 0;
-		Date fechaEmision = null;
+	public Map<String, Object> listarComprobantes(Date fechaEmision,int tipo,int limites[]){
 		int inicio = 0;
 		int fin = 0;
+		int total = 0;
 		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
 		Map<String, Object> datos = null;
-		tipoComprobante = Integer.parseInt(params.get("TIPCOM").toString());
-		fechaEmision = (Date)params.get("FECEMI");
-		inicio = Integer.parseInt(params.get("INI").toString());
-		fin = Integer.parseInt(params.get("FIN").toString());
+		List<Comprobante> comprobantes = null;
+		StringBuilder sql = new StringBuilder();
+		inicio = limites[0];
+		fin = limites[1];
+		
 		try {
+			datos = new HashMap<String, Object>();
 			con = Conexiones.getConexion();
-			StringBuilder sql = new StringBuilder();
-			sql.append("Select [Serie],[Numero],[RUC],[Cliente],[Moneda],[FechaEmision],[FechaCancelacion],[Dcto],[ValorVenta],[Impuesto],[TCambio] ");
-			sql.append("From [Comprobante] Where FechaEmision = ? and serie = ?");
+			sql.append("Select count(*) From Comprobante Where cast(FechaEmision as Date) = ? and serie = ? ");
+			ps =  con.prepareStatement(sql.toString());
+			ps.setDate(1, new java.sql.Date(fechaEmision.getTime()));
+			ps.setInt(2,tipo);
+			rs = ps.executeQuery();
+			total = (rs.next())?rs.getInt(1):0;
+			datos.put("TOTAL", total);
+			
+			if(ps!=null){
+				ps.close();
+				ps = null;
+			}
+			
+			sql.delete(0, sql.length());
+			sql.append("Select * from (");
+			sql.append("Select ROW_NUMBER() OVER (ORDER BY A.RUC) as row,A.Serie,B.Descripción as Descri,A.Numero,A.RUC,A.Cliente,");
+			sql.append("A.Moneda,C.NombreMoneda ,A.FechaEmision,A.FechaCancelacion,A.Dcto,A.ValorVenta,A.Impuesto,A.TCambio ");
+			sql.append("From Comprobante A ");
+			sql.append("Inner join TipoComprobante B on B.Cod_Comprobante = A.Serie ");
+			sql.append("Inner join TipoMoneda C on C.Moneda = A.Moneda ");
+			sql.append("Where cast(A.FechaEmision as Date) = ? and A.serie = ?) T ");
+			sql.append("Where T.row between ? and  ?");
 			ps = con.prepareStatement(sql.toString());
 			ps.setDate(1, new java.sql.Date(fechaEmision.getTime()));
-			ps.setInt(2, tipoComprobante);
+			ps.setInt(2, tipo);
+			ps.setInt(3, inicio);
+			ps.setInt(4, fin);
 			rs =ps.executeQuery();
-			datos = new HashMap<String, Object>();
-			if(rs.next()){
-				datos.put("NOMBRE",rs.getString("Nom_User"));
-				datos.put("TIPO",String.valueOf(rs.getInt("Tip_User")));
+			comprobantes = new ArrayList<Comprobante>();
+			while(rs.next()){
+				Comprobante comprobante = new Comprobante();
+				ComprobantePk id = new ComprobantePk();
+				id.setSerie(rs.getInt("Serie"));
+				id.setNumero(rs.getString("Numero"));
+				comprobante.setDesSerie(rs.getString("Descri"));
+				comprobante.setRuc(rs.getString("RUC"));
+				comprobante.setCliente(rs.getString("Cliente"));
+				comprobante.setMoneda(rs.getInt("Moneda"));
+				comprobante.setDesMoneda(rs.getString("NombreMoneda"));
+				comprobante.setFechaEmision(new Date(rs.getDate("FechaEmision").getTime()));
+				comprobante.setFechaCancelacion(new Date(rs.getDate("FechaCancelacion").getTime()));
+				comprobante.setDescuento(rs.getDouble("Dcto"));
+				comprobante.setValorVenta(rs.getDouble("ValorVenta"));
+				comprobante.setImpuesto(rs.getDouble("Impuesto"));
+				comprobante.setTCambio(rs.getDouble("TCambio"));
+				comprobante.setId(id);
+				comprobantes.add(comprobante);
 			}
+			datos.put("BANDEJA",comprobantes);
 		} catch (Exception e) {
-			LOGGER.error("Error al obtener usuario.",e);
+			datos = null;
+			LOGGER.error("Error al cargar comprobantes.",e);
 		}finally{
 			try {
                 if (ps != null) {
@@ -73,46 +116,5 @@ public class ComprobanteDao {
 		return datos;
 	}
 	
-	public Map<String, Object> listarDetalleComprobantes(Map<String, Object> params){
-		int tipoComprobante = 0;
-		int inicio = 0;
-		int fin = 0;
-		Connection con = null;
-		PreparedStatement ps = null;
-		ResultSet rs = null;
-		Map<String, String> datos = null;
-		try {
-			con = Conexiones.getConexion();
-			StringBuilder sql = new StringBuilder();
-			sql.append("Select Nom_User,Tip_User ");
-			sql.append("From AQUSUARIOS Where Log_User = ?");
-			ps = con.prepareStatement(sql.toString());
-			ps.setString(1, user);
-			rs =ps.executeQuery();
-			datos = new HashMap<String, String>();
-			if(rs.next()){
-				datos.put("NOMBRE",rs.getString("Nom_User"));
-				datos.put("TIPO",String.valueOf(rs.getInt("Tip_User")));
-			}
-		} catch (Exception e) {
-			LOGGER.error("Error al obtener usuario.",e);
-		}finally{
-			try {
-                if (ps != null) {
-                    ps.close();
-                }
-            } catch (SQLException e) {
-            	LOGGER.error("No se pudo liberar el recurso");
-            }
-            try {
-                if (con != null) {
-                    con.close();
-                }
-            } catch (SQLException e) {
-            	LOGGER.error("No se pudo liberar el recurso");
-            }
-		}
-		return datos;
-	}
 	
 }

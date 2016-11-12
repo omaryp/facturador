@@ -18,7 +18,6 @@ import pe.tallanes.sunat.model.Usuario;
 import pe.tallanes.sunat.util.ApplicationException;
 
 
-
 /**
  * @author Omar Yarleque
  *
@@ -49,6 +48,7 @@ public class WebServiceAuthenticationProvider implements AuthenticationProvider 
         	throw new ApplicationException("Error al cargar datos del usuario");
         sesion.setNombre(datos_usuario.get("NOMBRE"));        
         sesion.setTipoUsuario(Integer.parseInt(datos_usuario.get("TIPO").trim()));
+        sesion.setDescripcionTipo(datos_usuario.get("DES_TIPO").trim());
         return new UsernamePasswordAuthenticationToken(sesion, authentication.getCredentials(), authorities);
     }
     

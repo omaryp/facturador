@@ -14,7 +14,7 @@ import pe.tallanes.sunat.dao.util.Conexiones;
 import pe.tallanes.sunat.model.TipoComprobante;
 
 public class TipoComprobanteDao {
-	private static final Logger LOGGER = LoggerFactory.getLogger(UsuarioDao.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(TipoComprobanteDao.class);
 	private static TipoComprobanteDao dao = null;
 	private TipoComprobanteDao(){}
 	
@@ -33,7 +33,7 @@ public class TipoComprobanteDao {
 		try {
 			con = Conexiones.getConexion();
 			StringBuilder sql = new StringBuilder();
-			sql.append("Select Cod_Comprobante,Descripcion,Cod_Sunat ");
+			sql.append("Select Cod_Comprobante,Descripción descri,Cod_Sunat ");
 			sql.append("From TipoComprobante");
 			ps = con.prepareStatement(sql.toString());
 			rs =ps.executeQuery();
@@ -41,7 +41,7 @@ public class TipoComprobanteDao {
 			while(rs.next()){
 				TipoComprobante tipo = new TipoComprobante();
 				tipo.setCodigo(rs.getInt("Cod_Comprobante"));
-				tipo.setDescripcion(rs.getString("Descripcion"));
+				tipo.setDescripcion(rs.getString("descri"));
 				tipo.setCodigoSunat(rs.getInt("Cod_Sunat"));
 				datos.add(tipo);
 			}

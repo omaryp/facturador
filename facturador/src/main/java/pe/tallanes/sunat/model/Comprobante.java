@@ -4,11 +4,12 @@ import java.util.Date;
 
 public class Comprobante {
 	
-	private int serie;
-	private String numero;
+	private ComprobantePk id;
+	private String desSerie;
 	private String ruc;
 	private String cliente;
 	private int moneda;
+	private String desMoneda;
 	private Date fechaEmision;
 	private Date fechaCancelacion;
 	private double descuento;
@@ -18,18 +19,6 @@ public class Comprobante {
 	
 	public Comprobante(){}
 	
-	public int getSerie() {
-		return serie;
-	}
-	public void setSerie(int serie) {
-		this.serie = serie;
-	}
-	public String getNumero() {
-		return numero;
-	}
-	public void setNumero(String numero) {
-		this.numero = numero;
-	}
 	public String getRuc() {
 		return ruc;
 	}
@@ -85,4 +74,28 @@ public class Comprobante {
 		TCambio = tCambio;
 	}
 
+	public String getDesSerie() {
+		return desSerie;
+	}
+
+	public void setDesSerie(String desSerie) {
+		this.desSerie = desSerie;
+	}
+
+	public String getDesMoneda() {
+		return desMoneda;
+	}
+
+	public void setDesMoneda(String desMoneda) {
+		this.desMoneda = desMoneda;
+	}
+
+	public ComprobantePk getId() {
+		return id;
+	}
+
+	public void setId(ComprobantePk id) {
+		this.id = id;
+	}
+	
 }

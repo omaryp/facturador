@@ -36,8 +36,10 @@ public class UsuarioDao {
 		try {
 			con = Conexiones.getConexion();
 			StringBuilder sql = new StringBuilder();
-			sql.append("Select Nom_User,Tip_User ");
-			sql.append("From AQUSUARIOS Where Log_User = ?");
+			sql.append("Select u.Nom_User,u.Tip_User,t.Des_Tip ");
+			sql.append("From AQUSUARIOS u ");
+			sql.append("inner join AQTIPOUSUARIO t on u.Tip_User = t.Tip_user ");		
+			sql.append("Where u.Log_User = ?");
 			ps = con.prepareStatement(sql.toString());
 			ps.setString(1, user);
 			rs =ps.executeQuery();
@@ -45,6 +47,7 @@ public class UsuarioDao {
 			if(rs.next()){
 				datos.put("NOMBRE",rs.getString("Nom_User"));
 				datos.put("TIPO",String.valueOf(rs.getInt("Tip_User")));
+				datos.put("DES_TIPO",rs.getString("Des_Tip"));
 			}
 		} catch (Exception e) {
 			LOGGER.error("Error al obtener usuario.",e);
@@ -71,6 +74,7 @@ public class UsuarioDao {
 		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
+		int total = 0;
 		try {
 			con = Conexiones.getConexion();
 			StringBuilder sql = new StringBuilder();
@@ -79,7 +83,9 @@ public class UsuarioDao {
 			ps = con.prepareStatement(sql.toString());
 			ps.setString(1, user);
 			rs =ps.executeQuery();
-			return rs.next();
+			if(rs.next())
+				total = rs.getInt(1);
+			return (total==1);
 		} catch (Exception e) {
 			LOGGER.error("Error verificar usuario.",e);
 		}finally{
@@ -106,6 +112,7 @@ public class UsuarioDao {
 		Connection con = null;
 		PreparedStatement ps = null;
 		ResultSet rs = null;
+		int total = 0;
 		try {
 			con = Conexiones.getConexion();
 			StringBuilder sql = new StringBuilder();
@@ -115,7 +122,9 @@ public class UsuarioDao {
 			ps.setString(1, user);
 			ps.setString(2, pass);
 			rs =ps.executeQuery();
-			return rs.next();
+			if(rs.next())
+				total = rs.getInt(1);
+			return (total==1);
 		} catch (Exception e) {
 			LOGGER.error("Error al validar usuario.",e);
 		}finally{

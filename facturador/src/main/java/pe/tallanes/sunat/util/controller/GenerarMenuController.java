@@ -54,8 +54,8 @@ public class GenerarMenuController implements Serializable {
 		DefaultMenuItem menuItem = null;
 		if (menuModelBean == null) {
 			menuModelBean = new DefaultMenuModel();
-			menuItem = new DefaultMenuItem("Facturador");
-			menuItem.setUrl("");
+			menuItem = new DefaultMenuItem("Comprobantes");
+			menuItem.setUrl("comprobantes.do");
 			String id = "menu01";
 			menuItem.setId(id);
 			menuModelBean.addElement(menuItem);

@@ -1,7 +1,7 @@
 package pe.tallanes.sunat.model;
 
 public class TipoComprobante {
-	
+
 	private int codigo;
 	private String descripcion;
 	private int codigoSunat;

@@ -26,9 +26,8 @@
 		</span>
 		<div id="info" class="row">
 			<ul>
-				 
 				<li><span class="usuario"><h:outputText value="#{generarMenuController.userIniSesion.nombre}"/></span></li>
-				<li><span class="perfil"><h:outputText value="#{generarMenuController.userIniSesion.tipoUsuario}" /></span></li>
+				<li><span class="perfil"><h:outputText value="#{generarMenuController.userIniSesion.descripcionTipo}" /></span></li>
 				<li>
 					<h:outputLink value="#{request.contextPath}/j_spring_security_logout" id="lnklogout" styleClass="salir">
                   			Cerrar Sesión
