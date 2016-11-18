@@ -13,7 +13,7 @@ public class DetalleComprobante implements Serializable {
 	private String numero;
 	private int codigoArticulo;
 	private int tipoArticulo;
-	private int nombreArticulo;
+	private String nombreArticulo;
 	private double cantidad;
 	private double precio;
 	private double total;
@@ -49,11 +49,12 @@ public class DetalleComprobante implements Serializable {
 		this.tipoArticulo = tipoArticulo;
 	}
 
-	public int getNombreArticulo() {
+	
+	public String getNombreArticulo() {
 		return nombreArticulo;
 	}
 
-	public void setNombreArticulo(int nombreArticulo) {
+	public void setNombreArticulo(String nombreArticulo) {
 		this.nombreArticulo = nombreArticulo;
 	}
 

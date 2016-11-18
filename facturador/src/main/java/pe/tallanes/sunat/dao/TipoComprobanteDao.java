@@ -34,7 +34,8 @@ public class TipoComprobanteDao {
 			con = Conexiones.getConexion();
 			StringBuilder sql = new StringBuilder();
 			sql.append("Select Cod_Comprobante,Descripción descri,Cod_Sunat ");
-			sql.append("From TipoComprobante");
+			sql.append("From TipoComprobante ");
+			sql.append("Where Cod_Sunat <> '00' ");
 			ps = con.prepareStatement(sql.toString());
 			rs =ps.executeQuery();
 			datos = new ArrayList<TipoComprobante>();

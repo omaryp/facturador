@@ -89,7 +89,12 @@
 			<artifactId>sqljdbc4</artifactId>
 			<version>4.0</version>
 		</dependency>
-
+		
+		<dependency>
+			<groupId>org.codehaus.jackson</groupId>
+			<artifactId>jackson-mapper-asl</artifactId>
+			<version>1.9.2</version>
+		</dependency>
 	</dependencies>
 	<build>
 		<finalName>facturador</finalName>

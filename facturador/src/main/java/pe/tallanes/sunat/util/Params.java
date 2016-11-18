@@ -18,6 +18,7 @@ public class Params {
     public static String bd = null;
     public static String user = null;
     public static String pass = null;
+    public static String ruta = null;
     
     public static Properties configuracion;
 
@@ -39,19 +40,11 @@ public class Params {
         bd = getProperty("BD");
         user = getProperty("USER");
         pass = getProperty("PASS");
+        ruta = getProperty("RUTA");
         LOGGER.info("Parametros de configuración cargados exitosamente.");
     }
 
     private static String getProperty(String key) {
         return configuracion.getProperty(key);
     }
-
-	public static String getIp() {
-		return ip;
-	}
-
-	public static int getPort() {
-		return port;
-	}
-
 }

@@ -1,4 +1,4 @@
-package pe.tallanes.sunat.dao.util.listener;
+package pe.tallanes.sunat.util.listener;
 
 
 import javax.servlet.ServletContextEvent;

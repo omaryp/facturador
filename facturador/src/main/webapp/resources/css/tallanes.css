@@ -3,11 +3,11 @@ body {
     font: 11px Arial;
     height: 100%;
     _font: 11px 'HelveticaNeue-Light', helvetica, lucida, arial, sans-serif !important; 
-    background-color: #DEEDF7;
+    background-color: #F2FFF8;
 }
 
 #frm_header{
-	border-bottom: solid #00549F 2px;
+	border-bottom: solid #024138 2px;
 }
 
 .salir,.salir:VISITED {
@@ -31,10 +31,10 @@ body {
 }
 
 #titulo{
-	color:#FFB612;
+	color:#FFF;
     font-size: 23px;
     font-weight: bold;
-    padding: 4px;
+    padding: 14px;
 }
 
 .color_white{
@@ -48,7 +48,7 @@ body {
 
 #cabeza,#cabeza div{
 	border: none;
-	background-color: #DEEDF7;
+	background-color: #F2FFF8;
 	border-radius: 0px;
 	padding-top: 0px;
 	padding-left: 0px;
@@ -56,13 +56,13 @@ body {
 }
 
 #bck_cabecera{
-	background: #00549F url("../resources/images/header.jpg") no-repeat center top;
+	background: #024138 center top;
 	height: 62px;
 	width: 100%;
 }
 
 #info{
-	background-color: #DEEDF7;
+	background-color: #F2FFF8;
 	color: #5a5a5a;
 	text-decoration: none;
 	font-weight: bold;
@@ -81,7 +81,7 @@ body {
 
 .bordeinf{
 	border-bottom: 2px;
-	border-bottom-color: #FFB612;
+	border-bottom-color: #E72313;
 	border-bottom-style: solid;
 }
 .margen{

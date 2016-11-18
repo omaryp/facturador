@@ -15,7 +15,7 @@
 		<param-name>contextConfigLocation</param-name>
 		<param-value>/WEB-INF/config/web-application-config.xml</param-value>
 	</context-param>
-	<display-name>GYM_WEB</display-name>	
+	<display-name>facturador</display-name>	
 	<servlet>
 		<servlet-name>Faces Servlet</servlet-name>
 		<servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
@@ -52,7 +52,7 @@
 	</listener>	
 	<listener>
 		<description>listener BD</description>
-        <listener-class>pe.tallanes.sunat.dao.util.listener.ListenerApp</listener-class>
+        <listener-class>pe.tallanes.sunat.util.listener.ListenerApp</listener-class>
 	</listener>
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>

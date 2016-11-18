@@ -19,11 +19,13 @@ import org.slf4j.LoggerFactory;
 import pe.tallanes.sunat.dao.ComprobanteDao;
 import pe.tallanes.sunat.dao.TipoComprobanteDao;
 import pe.tallanes.sunat.model.Comprobante;
+import pe.tallanes.sunat.model.ComprobantePk;
 import pe.tallanes.sunat.model.TipoComprobante;
 import pe.tallanes.sunat.model.Usuario;
 import pe.tallanes.sunat.util.Js;
 import pe.tallanes.sunat.util.Message;
 import pe.tallanes.sunat.util.controller.InitController;
+import pe.tallanes.sunat.util.json.GenerarTxt;
 
 
 @ManagedBean
@@ -39,6 +41,8 @@ public class ComprobanteController implements Serializable {
 
 	@ManagedProperty(value = "#{InitController}")
 	private InitController initController;
+	@ManagedProperty(value = "#{detalleComprobanteController}")
+	private DetalleComprobanteController detalle;
 	private int tipoSeleccionado;
 	private Comprobante seleccionado;
 	private Date fechaEmision;
@@ -49,14 +53,12 @@ public class ComprobanteController implements Serializable {
 	private int primero;
 	private int ultimo;
 	
-	public ComprobanteController(){
-		
-	}
+	public ComprobanteController(){}
+	
 	@PostConstruct
 	public void cargaParametros(){
 		user = (Usuario)initController.getSessionVars().get("USUARIO");
 		tipos = TipoComprobanteDao.getInstance().listarTiposComprobantes();
-		//loadLazymodelComprobantes();
 	}
 	
 	public void loadLazymodelComprobantes() {
@@ -108,10 +110,16 @@ public class ComprobanteController implements Serializable {
 	
 	public void cargarComprobante(){
 		initController.getSessionVars().put("COMPROBANTE", seleccionado);
-		Js.execute("PF('dlg_detalle').show()");
+		detalle.cargarDatos();
 	}
 	
 	public void cargarComprobantes(){
+		if(validarEntradas())
+			loadLazymodelComprobantes();
+		Js.update("mensajes");
+	}
+	
+	public boolean validarEntradas(){
 		boolean ejecutar = true;
 		if(fechaEmision == null){
 			Message.addError(null, "No ha ingresado fecha de emisión !!");
@@ -121,8 +129,17 @@ public class ComprobanteController implements Serializable {
 			Message.addError(null, "No ha seleccionado tipo de comprobante !!");
 			ejecutar = false;
 		}
-		if(ejecutar)
-			loadLazymodelComprobantes();
+		return ejecutar;
+	}
+	
+	public void generarTxt(){
+		if(validarEntradas()){
+			List<ComprobantePk> pks = ComprobanteDao.getInstance().listarComprobantes(fechaEmision, tipoSeleccionado);
+			if(GenerarTxt.getInstance().toTxt(pks, tipoSeleccionado))
+				Message.addInfo(null, "Archivos enviados correctamente al Facturador-SUNAT !!");
+			else
+				Message.addError(null, "No se ha generado los archivos !!");	
+		}
 		Js.update("mensajes");
 	}
 	
@@ -181,6 +198,12 @@ public class ComprobanteController implements Serializable {
 	}
 	public void setSeleccionado(Comprobante seleccionado) {
 		this.seleccionado = seleccionado;
+	}
+	public DetalleComprobanteController getDetalle() {
+		return detalle;
+	}
+	public void setDetalle(DetalleComprobanteController detalle) {
+		this.detalle = detalle;
 	}	
 	
 }

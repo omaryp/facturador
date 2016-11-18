@@ -5,50 +5,59 @@
 	xmlns:h="http://java.sun.com/jsf/html"
 	xmlns:p="http://primefaces.org/ui"
 	xmlns:f="http://java.sun.com/jsf/core">
-	<h:form id="ing_cliente" prependId="false">
 		<p:panel header="DETALLE COMPROBANTE" styleClass="margen sin_borde">
-			  <h:form id="frm_detalle" prependId="false"> 		
-				 <div class="margen row">  
-					<h:outputText value="Tipo : " styleClass="derecha espacio_comp one sixth"/>
-					<h:outputText value="#{detalleComprobanteController.seleccionado.desSerie}" styleClass="derecha espacio_comp one sixth"/>
-			     </div>  
-			     <div class="margen row">  
-					<h:outputText value="Serie : " styleClass="derecha espacio_comp one sixth"/>
-					<h:outputText value="#{detalleComprobanteController.seleccionado.id.serie}" styleClass="derecha espacio_comp one sixth"/>
-					<h:outputText value="Numero : " styleClass="derecha espacio_comp one sixth"/>
-					<h:outputText value="#{detalleComprobanteController.seleccionado.id.numero}" styleClass="derecha espacio_comp one sixth"/>
-					<h:outputText value="Moneda : " styleClass="derecha espacio_comp one sixth"/>
-					<h:outputText value="#{detalleComprobanteController.seleccionado.desMoneda}" styleClass="derecha espacio_comp one sixth"/>
-			     </div>
-			     <div class="margen">
-			    	<p:dataTable id="tabla_detalle" 
-			    		paginator="true" lazy="true" 
-			    		rows="5" paginatorPosition="bottom" 
-			    		emptyMessage="No hay coincidencias !!" var="detalle"
-			    		value="#{detalleComprobanteController.modelDetalleComprobante}"
-			    		paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}" >
-				        <p:column headerText="Código">
-				            <h:outputText value="#{detalle.codigoArticulo}" />
-				        </p:column>
-				        <p:column headerText="Tipo">
-				            <h:outputText value="#{detalle.tipoArticulo}" />
-				        </p:column>
-				        <p:column headerText="Nombre">
-				            <h:outputText value="#{detalle.nombreArticulo}" />
-				        </p:column>
-				        <p:column headerText="Cantidad">
-				            <h:outputText value="#{detalle.cantidad}" />
-				        </p:column>
-				        <p:column headerText="Precio">
-				            <h:outputText value="#{detalle.precio}" />
-				        </p:column>
-				        <p:column headerText="Total">
-				            <h:outputText value="#{detalle.total}" />
-				        </p:column>
-    				</p:dataTable>
-			     </div>
-			     <p:commandButton id="btnSalir" value="Salir" actionListener="#{detalleComprobanteController.salirDetalle}" icon="ui-icon-closethick"  />
-	        </h:form>
-        </p:panel>
-	</h:form>
+			<div class="margen row">
+				<h:outputText value="Tipo : "
+					styleClass="negrita derecha espacio_comp one sixth" />
+				<h:outputText
+					value="#{detalleComprobanteController.seleccionado.desSerie}"
+					styleClass="derecha espacio_comp one sixth" />
+			</div>
+			<div class="margen row">
+				<h:outputText value="Serie : "
+					styleClass="negrita derecha espacio_comp one sixth" />
+				<h:outputText
+					value="#{detalleComprobanteController.seleccionado.id.serie}"
+					styleClass="derecha espacio_comp one sixth" />
+				<h:outputText value="Numero : "
+					styleClass="negrita derecha espacio_comp one sixth" />
+				<h:outputText
+					value="#{detalleComprobanteController.seleccionado.id.numero}"
+					styleClass="derecha espacio_comp one sixth" />
+				<h:outputText value="Moneda : "
+					styleClass="negrita derecha espacio_comp one sixth" />
+				<h:outputText
+					value="#{detalleComprobanteController.seleccionado.desMoneda}"
+					styleClass="derecha espacio_comp one sixth" />
+			</div>
+			<div class="margen">
+				<p:dataTable id="tabla_detalle" paginator="true" lazy="true"
+					rows="5" paginatorPosition="bottom"
+					emptyMessage="No hay coincidencias !!" var="detalle"
+					value="#{detalleComprobanteController.modelDetalleComprobante}"
+					paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
+					<p:column headerText="Código">
+						<h:outputText value="#{detalle.codigoArticulo}" />
+					</p:column>
+					<p:column headerText="Tipo">
+						<h:outputText value="#{detalle.tipoArticulo}" />
+					</p:column>
+					<p:column headerText="Nombre">
+						<h:outputText value="#{detalle.nombreArticulo}" />
+					</p:column>
+					<p:column headerText="Cantidad">
+						<h:outputText value="#{detalle.cantidad}" />
+					</p:column>
+					<p:column headerText="Precio">
+						<h:outputText value="#{detalle.precio}" />
+					</p:column>
+					<p:column headerText="Total">
+						<h:outputText value="#{detalle.total}" />
+					</p:column>
+				</p:dataTable>
+			</div>
+			<p:commandButton value="Salir"
+				action="#{detalleComprobanteController.salirDetalle}"
+				icon="ui-icon-closethick" />
+		</p:panel>
 </ui:composition>

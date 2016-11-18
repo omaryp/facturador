@@ -49,10 +49,15 @@ public class DetalleComprobanteController implements Serializable {
 	
 	@PostConstruct
 	public void cargaParametros(){
-		user = (Usuario)initController.getSessionVars().get("USUARIO");
+	}
+	
+	public void cargarDatos(){
 		seleccionado = (Comprobante)initController.getSessionVars().get("COMPROBANTE");
-		if(seleccionado != null)
-		  loadLazymodelDetalleComprobantes();
+		if(seleccionado != null){
+			loadLazymodelDetalleComprobantes();
+			Js.execute("PF('dlg_detalle').show()");
+			Js.update("ver_detalle");
+		}
 	}
 	
 	public void loadLazymodelDetalleComprobantes() {
@@ -103,12 +108,14 @@ public class DetalleComprobanteController implements Serializable {
 	}
 	
 	public void salirDetalle(){
-		Js.execute("PF('dlg_detalle').hide()");
 		seleccionado = null;
+		Js.execute("PF('dlg_detalle').hide()");
 	}
+	
 	public InitController getInitController() {
 		return initController;
 	}
+	
 	public void setInitController(InitController initController) {
 		this.initController = initController;
 	}
@@ -116,12 +123,15 @@ public class DetalleComprobanteController implements Serializable {
 	public List<DetalleComprobante> getDetalleComprobantes() {
 		return detalleComprobantes;
 	}
+	
 	public void setDetalleComprobantes(List<DetalleComprobante> detalleComprobantes) {
 		this.detalleComprobantes = detalleComprobantes;
 	}
+	
 	public LazyDataModel<DetalleComprobante> getModelDetalleComprobante() {
 		return modelDetalleComprobante;
 	}
+	
 	public void setModelDetalleComprobante(
 			LazyDataModel<DetalleComprobante> modelDetalleComprobante) {
 		this.modelDetalleComprobante = modelDetalleComprobante;

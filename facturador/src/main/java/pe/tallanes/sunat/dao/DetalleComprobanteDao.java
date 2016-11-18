@@ -58,23 +58,30 @@ public class DetalleComprobanteDao {
 				}
 				sql.delete(0, sql.length());
 				sql.append("Select * from (");
-				sql.append("Select ROW_NUMBER() OVER (ORDER BY Cod_Articulo) as row,A.Serie,A.Numero,A.Cod_Articulo,");
+				sql.append("Select ROW_NUMBER() OVER (ORDER BY A.Cod_Articulo) as row,A.Serie,A.Numero,A.Cod_Articulo,");
 				sql.append("A.CodTipoArticulo,B.NombreArticulo,A.Cantidad,A.Precio,A.Total ");
 				sql.append("From  Articulos_Comprobante A ");
 				sql.append("inner join Articulos B on A.Cod_Articulo = B.Cod_Articulo and A.CodTipoArticulo = B.CodTipoArticulo ");
-			    sql.append("Where Serie = ? and Numero = ?) T ");
+			    sql.append("Where A.Serie = ? and A.Numero = ? and A.Cod_Comprobante = ? ) T ");
 				sql.append("Where T.row between ? and  ?");
 				ps = con.prepareStatement(sql.toString());
 				ps.setInt(1, com.getId().getSerie() );
 				ps.setString(2, com.getId().getNumero());
-				ps.setInt(3, inicio);
-				ps.setInt(4, fin);
+				ps.setString(3, com.getId().getCodigoComprobante());
+				ps.setInt(4, inicio);
+				ps.setInt(5, fin);
 				rs =ps.executeQuery();
 				detalles = new ArrayList<DetalleComprobante>();
 				while(rs.next()){
 					DetalleComprobante detalle = new DetalleComprobante();
 					detalle.setSerie(rs.getInt("Serie"));
 					detalle.setNumero(rs.getString("Numero"));
+					detalle.setCodigoArticulo(rs.getInt("Cod_Articulo"));
+					detalle.setTipoArticulo(rs.getInt("CodTipoArticulo"));
+					detalle.setNombreArticulo(rs.getString("NombreArticulo"));
+					detalle.setCantidad(rs.getDouble("Cantidad"));
+					detalle.setPrecio(rs.getDouble("Precio"));
+					detalle.setTotal(rs.getDouble("Total"));
 					detalles.add(detalle);
 				}
 			}

@@ -10,7 +10,7 @@
     	Consulta de comprobantes
     </ui:define>
 	<ui:define name="cuerpo">
-		<p:panel header="Consulta  de comprobantes"
+		<p:panel header="CONSULTA DE COMPROBANTES"
 			styleClass="margen sin_borde">
 			<h:form id="frm_comprobante" prependId="false">
 				<div class="margen row">
@@ -21,7 +21,7 @@
 						<f:selectItem itemLabel="Seleccione Tipo de comprobante"
 							itemValue="-1" />
 						<f:selectItems value="#{comprobanteController.tipos}" var="tipo"
-							itemLabel="#{tipo.descripcion}" itemValue="#{tipo.codigo}" />
+							itemLabel="#{tipo.descripcion}" itemValue="#{tipo.codigoSunat}" />
 					</p:selectOneMenu>
 				</div>
 				<div class="margen row">
@@ -62,19 +62,21 @@
 							<h:outputText value="#{comp.impuesto}" />
 						</p:column>
 						<p:column headerText="Opciones">
-							<p:commandButton icon="ui-icon-document"
-								title="Ver detalle de comprobante"
-								action="#{comprobanteController.cargarComprobante}">
+							<p:commandButton icon="ui-icon-document" title="Ver detalle de comprobante" action="#{comprobanteController.cargarComprobante}">
 								<f:setPropertyActionListener value="#{comp}" target="#{comprobanteController.seleccionado}" />
 							</p:commandButton>
 						</p:column>
 					</p:dataTable>
 				</div>
+				<div class = "margen">
+					<p:commandButton  value="Enviar datos a facturador" action="#{comprobanteController.generarTxt}" icon="ui-icon-check" />
+				</div>
+				<p:dialog id="ver_detalle" showHeader="false" 
+					widgetVar="dlg_detalle" width="900">
+					<ui:include src="/formularios/frmDetalleComprobante.xhtml" />
+				</p:dialog>
 			</h:form>
 		</p:panel>
-		<p:dialog id="ver_detalle" showHeader="false" widgetVar="dlg_detalle"
-			width="900">
-			<ui:include src="/formularios/frmDetalleComprobante.xhtml" />
-		</p:dialog>
+
 	</ui:define>
 </ui:composition>
