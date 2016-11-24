@@ -2,7 +2,7 @@ package pe.tallanes.sunat.model.json;
 
 import java.io.Serializable;
 
-public class CabeceraNotas implements Serializable {
+public class CabeceraNota implements Serializable {
 	
 	/**
 	 * 
@@ -26,7 +26,7 @@ public class CabeceraNotas implements Serializable {
 	private String mtoOtrosTributos;
 	private String mtoImpVenta;
 	
-	public CabeceraNotas(){}
+	public CabeceraNota(){}
 
 	public String getFecEmision() {
 		return fecEmision;
@@ -164,6 +164,44 @@ public class CabeceraNotas implements Serializable {
 		this.mtoImpVenta = mtoImpVenta;
 	}
 	
-	
+	@Override
+	public String toString(){
+		StringBuilder tostring  = new StringBuilder();
+		tostring.append(fecEmision);
+		tostring.append("|");
+		tostring.append(codMotivo);
+		tostring.append("|");
+		tostring.append(desMotivo);
+		tostring.append("|");
+		tostring.append(tipDocAfectado);
+		tostring.append("|");
+		tostring.append(numDocAfectado);
+		tostring.append("|");
+		tostring.append(tipDocUsuario);
+		tostring.append("|");
+	 	tostring.append(numDocUsuario);
+	 	tostring.append("|");
+	 	tostring.append(rznSocialUsuario);
+	 	tostring.append("|");
+	 	tostring.append(tipMoneda);
+	 	tostring.append("|");
+	 	tostring.append(sumOtrosCargos);
+	 	tostring.append("|");
+	 	tostring.append(mtoOperGravadas);
+	 	tostring.append("|");
+	 	tostring.append(mtoOperInafectas);
+	 	tostring.append("|");
+	 	tostring.append(mtoOperExoneradas);
+	 	tostring.append("|");
+	 	tostring.append(mtoIGV);
+	 	tostring.append("|");
+	 	tostring.append(mtoISC);
+	 	tostring.append("|");
+	 	tostring.append(mtoOtrosTributos);
+	 	tostring.append("|");
+	 	tostring.append(mtoImpVenta);
+	 	tostring.append("|");
+	 	return tostring.toString();
+	}
 
 }

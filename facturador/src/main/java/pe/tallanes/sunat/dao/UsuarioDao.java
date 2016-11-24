@@ -117,7 +117,7 @@ public class UsuarioDao {
 			con = Conexiones.getConexion();
 			StringBuilder sql = new StringBuilder();
 			sql.append("Select count(*) from AQUSUARIOS ");
-			sql.append("Where Log_User = ? and clave = ?");
+			sql.append("Where Nom_User = ? and clave = ?");
 			ps = con.prepareStatement(sql.toString());
 			ps.setString(1, user);
 			ps.setString(2, pass);

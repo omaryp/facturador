@@ -58,7 +58,6 @@ public final class ConnectionPoolImpl  {
 		} catch (Exception e) {
 			LOGGER.error("Error al cerrar pool de conexiones.",e);
 		}
-        
     }
 
     public synchronized Connection getConnection(){

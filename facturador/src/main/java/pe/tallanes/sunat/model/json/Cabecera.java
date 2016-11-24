@@ -194,6 +194,7 @@ public class Cabecera {
 	 	tostring.append(mtoOtrosTributos);
 	 	tostring.append("|");
 	 	tostring.append(mtoImpVenta);
+	 	tostring.append("|");
 	 	return tostring.toString();
 	}
 

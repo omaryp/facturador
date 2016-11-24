@@ -22,11 +22,12 @@ public final class ListenerApp implements ServletContextListener {
      * @see ServletContextListener#contextInitialized(ServletContextEvent)
      */
     public void contextInitialized(ServletContextEvent arg0) {
-        try {    	
-        	LOGGER.info("Iniciando el Pool de Conexiones");
+        try {  
         	Params.cargaParametros();
-	        Conexiones.iniciarPool(Params.user, Params.pass);
+        	LOGGER.info("Iniciando el Pool de Conexiones");
+        	Conexiones.iniciarPool(Params.user, Params.pass);
 	        LOGGER.info("Se termino de iniciar el Pool de Conexiones");
+	        Params.cargaParametros();
         } catch (Exception e) {
         	LOGGER.info("Error : ",e);
         }

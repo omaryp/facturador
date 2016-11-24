@@ -35,9 +35,9 @@ public class DetalleDao {
 		StringBuilder sql = new StringBuilder();
 		try {
 			con = Conexiones.getConexion();
-			sql.append("Select cast(A.Cantidad as varchar(23)) cantidad,'' codPro,'' codProSunat,B.NombreArticulo,cast(A.Precio as varchar(23)) valUni,");
-			sql.append("'0.00' dscto,cast(((A.Precio*C.Porcentaje)/100) as varchar(15)) igv,");
-			sql.append("'10' afecta,'0.00' montoIsc, '0.00' sistemaIsc, cast(A.Precio as varchar(23)) preUni  , cast(A.Total as varchar(15)) total ");
+			sql.append("Select cast(A.Cantidad as varchar(23)) cantidad,B.Cod_Articulo codPro,'' codProSunat,B.NombreArticulo,cast(A.Precio as varchar(23)) valUni,");
+			sql.append("'0.00' dscto,cast(cast(((A.Precio*C.Porcentaje)/100) as decimal(12,2)) as varchar(15)) igv,");
+			sql.append("'10' afecta,'0.00' montoIsc, '01' sistemaIsc, cast(A.Precio as varchar(23)) preUni  , cast(A.Total as varchar(15)) total ");
 			sql.append("From  Articulos_Comprobante A ");
 			sql.append("inner join Articulos B on A.Cod_Articulo = B.Cod_Articulo and A.CodTipoArticulo = B.CodTipoArticulo ");
 			sql.append("inner join IGV C on C.Activado = 1 ");

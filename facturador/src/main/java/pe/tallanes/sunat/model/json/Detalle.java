@@ -151,6 +151,7 @@ public class Detalle{
 	 	tostring.append(mtoPrecioVentaItem);
 	 	tostring.append("|");
 	 	tostring.append(mtoValorVentaItem);
+	 	tostring.append("|");
 	 	return tostring.toString();
 	}
 

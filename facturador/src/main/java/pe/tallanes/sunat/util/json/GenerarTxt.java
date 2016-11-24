@@ -9,66 +9,84 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import pe.tallanes.sunat.dao.json.CabeceraDao;
+import pe.tallanes.sunat.dao.json.CabeceraNotaDao;
 import pe.tallanes.sunat.dao.json.DetalleDao;
 import pe.tallanes.sunat.model.ComprobantePk;
 import pe.tallanes.sunat.model.json.Cabecera;
+import pe.tallanes.sunat.model.json.CabeceraNota;
 import pe.tallanes.sunat.model.json.Detalle;
 import pe.tallanes.sunat.util.Cadena;
 import pe.tallanes.sunat.util.Extension;
 import pe.tallanes.sunat.util.Params;
 
 public class GenerarTxt {
-	private static final Logger LOGGER = LoggerFactory.getLogger(GenerarTxt.class);
+	private static final Logger LOGGER = LoggerFactory
+			.getLogger(GenerarTxt.class);
 	private static GenerarTxt txt = null;
-	private GenerarTxt(){} 	
-	
-	public static GenerarTxt getInstance(){
-		if(txt == null){
+
+	private GenerarTxt() {
+	}
+
+	public static GenerarTxt getInstance() {
+		if (txt == null) {
 			txt = new GenerarTxt();
 		}
 		return txt;
 	}
-	
-	public boolean toTxt(List<ComprobantePk> lista,int tipoComprobante){
-		try {	
+
+	public boolean toTxt(List<ComprobantePk> lista, int tipoComprobante) {
+		try {
 			for (ComprobantePk id : lista) {
-				Cabecera cab = CabeceraDao.getInstance().getCabecera(id);
-				String name = nombreArchivo(id, cab, tipoComprobante);
-				String ruta = getRutaArchivo(name, Extension.CABECERA.value());
+				ComprobantePk notaModifica = null;
+				String name = nombreArchivo(id, tipoComprobante);
+				String ruta = "";
 				List<String> cadenas = new ArrayList<String>();
-				cadenas.add(cab.toString());
+				switch (tipoComprobante) {
+					case 1:
+					case 3:
+						Cabecera cab = CabeceraDao.getInstance().getCabecera(id);
+						cadenas.add(cab.toString());
+						ruta = getRutaArchivo(name, Extension.CABECERA.value());
+						break;
+					case 7:
+					case 8:
+						CabeceraNota cabn = CabeceraNotaDao.getInstance().getCabeceraNota(id);
+						notaModifica = CabeceraNotaDao.getInstance().getDocumentoModifica(id);
+						ruta = getRutaArchivo(name, Extension.NOTAS.value());
+						cadenas.add(cabn.toString());
+						break;
+				}
 				crearArchivo(ruta, cadenas);
-				
 				cadenas.clear();
-				List<Detalle> detalle = DetalleDao.getInstance().listarDetalle(id);
+				List<Detalle> detalle = DetalleDao.getInstance().listarDetalle((notaModifica == null )?id:notaModifica);
 				for (Detalle det : detalle) {
 					cadenas.add(det.toString());
 				}
 				ruta = getRutaArchivo(name, Extension.DETALLE.value());
 				crearArchivo(ruta, cadenas);
-				
-				//GenerarJson.getInstance().toJsonFile(sunat,ruta);
+
+				// GenerarJson.getInstance().toJsonFile(sunat,ruta);
 			}
 			return true;
 		} catch (Exception e) {
-			LOGGER.error("Error al generar formato Json.", e);
+			LOGGER.error("Error al generar archivo de texto.", e);
 		}
 		return false;
 	}
-	
-	public String nombreArchivo(ComprobantePk id,Cabecera cab,int tipoComprobante){
+
+	public String nombreArchivo(ComprobantePk id,int tipoComprobante) {
 		StringBuilder fileName = new StringBuilder();
-		fileName.append(cab.getNumDocUsuario());
+		fileName.append(Params.ruc);
 		fileName.append("-");
-		fileName.append(Cadena.completar(String.valueOf(tipoComprobante), 2, "0", false));
+		fileName.append(Cadena.completar(String.valueOf(tipoComprobante), 2,"0", false));
 		fileName.append("-");
-		fileName.append(Cadena.completar(String.valueOf(id.getSerie()), 4, "0", false));
+		fileName.append(Cadena.formatoSerie(id.getSerie(), tipoComprobante));
 		fileName.append("-");
 		fileName.append(Cadena.completar(id.getNumero(), 8, "0", false));
 		return fileName.toString();
 	}
-	
-	public String getRutaArchivo(String fileName,String ext){
+
+	public String getRutaArchivo(String fileName, String ext) {
 		StringBuilder ruta = new StringBuilder();
 		ruta.append(Params.ruta);
 		ruta.append(System.getProperty("file.separator"));
@@ -77,8 +95,8 @@ public class GenerarTxt {
 		ruta.append(ext);
 		return ruta.toString();
 	}
-	
-	public void crearArchivo(String ruta,List<String> cadenas){
+
+	public void crearArchivo(String ruta, List<String> cadenas) {
 		BufferedWriter out = null;
 		try {
 			out = new BufferedWriter(new FileWriter(ruta));
@@ -91,5 +109,5 @@ public class GenerarTxt {
 			LOGGER.error("Error al generar archivo de texto.", e);
 		}
 	}
-	
+
 }

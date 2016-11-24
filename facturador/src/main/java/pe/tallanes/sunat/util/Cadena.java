@@ -10,25 +10,41 @@ import java.text.SimpleDateFormat;
 
 public class Cadena {
 
-    public static String completar(String sCadena, int total, String sCadenaRelleno, boolean derecha) {
-        String x = sCadena;
-        if (x.length() >= total) {
-            x = sCadena.substring(0, total);
-        } else {
-            while (x.length() < total) {
-                if (derecha) {
-                    x = x + sCadenaRelleno;
-                } else {
-                    x = sCadenaRelleno + x;
-                }
-            }
-        }
-        return x;
-    }
-    
-    public static String formatoFecha(Date pFecha) {	
-    	SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
-        return formato.format(pFecha);
-    }
-    
+	public static String completar(String sCadena, int total,String sCadenaRelleno, boolean derecha) {
+		String x = sCadena;
+		if (x.length() >= total) {
+			x = sCadena.substring(0, total);
+		} else {
+			while (x.length() < total) {
+				if (derecha) {
+					x = x + sCadenaRelleno;
+				} else {
+					x = sCadenaRelleno + x;
+				}
+			}
+		}
+		return x;
+	}
+
+	public static String formatoFecha(Date pFecha) {
+		SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
+		return formato.format(pFecha);
+	}
+
+	public static String formatoSerie(int serie,int tipoComprobante) {
+		StringBuilder ser = new StringBuilder();
+		switch (tipoComprobante) {
+			case 1:
+			case 7:
+			case 8:
+				ser.append("F");
+				break;
+			case 3:
+				ser.append("B");
+				break;
+		}
+		ser.append(completar(String.valueOf(serie), 3, "0", false));
+		return ser.toString();
+	}
+
 }

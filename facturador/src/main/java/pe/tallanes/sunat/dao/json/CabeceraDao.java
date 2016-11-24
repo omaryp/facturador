@@ -35,7 +35,7 @@ public class CabeceraDao {
 		Cabecera cabecera = null;
 		try {
 			con = Conexiones.getConexion();
-			sql.append("Select '01' tipOpe,A.FechaEmision,'' codLocal,'' tipDoc ,A.RUC numDoc ,A.Cliente,");
+			sql.append("Select '01' tipOpe,A.FechaEmision,'0' codLocal,'' tipDoc ,A.RUC numDoc ,A.Cliente,");
 			sql.append("A.Moneda,'0.00' dsctoGlobal,'0.00' otroCargo,'0.00' totDscto,cast(A.ValorVenta as varchar(15)) ValorVenta,cast(A.Impuesto as varchar(15)) Impuesto,");
 			sql.append("'0.00' mtoIsc,'0.00' otroTrib,cast((A.ValorVenta+A.Impuesto) as varchar(15)) total ,A.Cod_Comprobante ");
 			sql.append("From Comprobante A ");
@@ -65,8 +65,8 @@ public class CabeceraDao {
 				cabecera.setSumOtrosCargos(rs.getString("otroCargo"));
 				cabecera.setMtoDescuentos(rs.getString("totDscto"));
 				cabecera.setMtoOperGravadas(rs.getString("ValorVenta"));
-				cabecera.setMtoOperInafectas(rs.getString("ValorVenta"));
-				cabecera.setMtoOperExoneradas(rs.getString("ValorVenta"));
+				cabecera.setMtoOperInafectas("0.00");
+				cabecera.setMtoOperExoneradas("0.00");
 				cabecera.setMtoIGV(rs.getString("Impuesto"));
 				cabecera.setMtoISC(rs.getString("mtoIsc"));
 				cabecera.setMtoOtrosTributos(rs.getString("otroTrib"));
