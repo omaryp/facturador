@@ -80,7 +80,7 @@ public class GenerarTxt {
 		fileName.append("-");
 		fileName.append(Cadena.completar(String.valueOf(tipoComprobante), 2,"0", false));
 		fileName.append("-");
-		fileName.append(Cadena.formatoSerie(id.getSerie(), tipoComprobante));
+		fileName.append(id.getSerie());
 		fileName.append("-");
 		fileName.append(Cadena.completar(id.getNumero(), 8, "0", false));
 		return fileName.toString();

@@ -46,7 +46,7 @@ public class DetalleComprobanteDao {
 			con = Conexiones.getConexion();
 			sql.append("SELECT count(*) FROM Articulos_Comprobante where Serie = ? and Numero = ?");
 			ps =  con.prepareStatement(sql.toString());
-			ps.setInt(1, com.getId().getSerie());
+			ps.setString(1, com.getId().getSerie());
 			ps.setString(2,com.getId().getNumero());
 			rs = ps.executeQuery();
 			total = (rs.next())?rs.getInt(1):0;
@@ -65,7 +65,7 @@ public class DetalleComprobanteDao {
 			    sql.append("Where A.Serie = ? and A.Numero = ? and A.Cod_Comprobante = ? ) T ");
 				sql.append("Where T.row between ? and  ?");
 				ps = con.prepareStatement(sql.toString());
-				ps.setInt(1, com.getId().getSerie() );
+				ps.setString(1, com.getId().getSerie() );
 				ps.setString(2, com.getId().getNumero());
 				ps.setString(3, com.getId().getCodigoComprobante());
 				ps.setInt(4, inicio);
@@ -74,7 +74,7 @@ public class DetalleComprobanteDao {
 				detalles = new ArrayList<DetalleComprobante>();
 				while(rs.next()){
 					DetalleComprobante detalle = new DetalleComprobante();
-					detalle.setSerie(rs.getInt("Serie"));
+					detalle.setSerie(rs.getString("Serie"));
 					detalle.setNumero(rs.getString("Numero"));
 					detalle.setCodigoArticulo(rs.getInt("Cod_Articulo"));
 					detalle.setTipoArticulo(rs.getInt("CodTipoArticulo"));

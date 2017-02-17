@@ -9,7 +9,7 @@ public class DetalleComprobante implements Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private int serie;
+	private String serie;
 	private String numero;
 	private int codigoArticulo;
 	private int tipoArticulo;
@@ -20,12 +20,17 @@ public class DetalleComprobante implements Serializable {
 	
 	public DetalleComprobante(){}
 	
-	public int getSerie() {
+	
+	public String getSerie() {
 		return serie;
 	}
-	public void setSerie(int serie) {
+
+
+	public void setSerie(String serie) {
 		this.serie = serie;
 	}
+
+
 	public String getNumero() {
 		return numero;
 	}

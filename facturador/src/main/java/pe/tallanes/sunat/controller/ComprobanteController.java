@@ -2,6 +2,7 @@ package pe.tallanes.sunat.controller;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 import javax.annotation.PostConstruct;
@@ -44,14 +45,18 @@ public class ComprobanteController implements Serializable {
 	@ManagedProperty(value = "#{detalleComprobanteController}")
 	private DetalleComprobanteController detalle;
 	private int tipoSeleccionado;
+	private int tipoBusqueda;
+	private ComprobantePk idBusqueda;
 	private Comprobante seleccionado;
-	private Date fechaEmision;
+	private Date fechaInicio;
+	private Date fechaFin;
 	private List<Comprobante> comprobantes;
 	private List<TipoComprobante> tipos;
 	private LazyDataModel<Comprobante> modelComprobante;
 	private Usuario user;
 	private int primero;
 	private int ultimo;
+	private Map<String,Object> parametros;
 	
 	public ComprobanteController(){}
 	
@@ -59,6 +64,8 @@ public class ComprobanteController implements Serializable {
 	public void cargaParametros(){
 		user = (Usuario)initController.getSessionVars().get("USUARIO");
 		tipos = TipoComprobanteDao.getInstance().listarTiposComprobantes();
+		tipoBusqueda = 1;
+		idBusqueda = new ComprobantePk();
 	}
 	
 	public void loadLazymodelComprobantes() {
@@ -94,7 +101,7 @@ public class ComprobanteController implements Serializable {
         limites[0] = primero;
         limites[1] = ultimo;
         try {
-        	map = ComprobanteDao.getInstance().listarComprobantes(fechaEmision,tipoSeleccionado,limites);
+			map = ComprobanteDao.getInstance().listarComprobantes(parametros,tipoBusqueda,limites);
         	count = (Integer) map.get("TOTAL");
             if (count != 0) {
 				comprobantes = (List<Comprobante>) map.get("BANDEJA");
@@ -114,33 +121,76 @@ public class ComprobanteController implements Serializable {
 	}
 	
 	public void cargarComprobantes(){
-		if(validarEntradas())
+		if(validarEntradas()){
+			parametros = new HashMap<String,Object>();
+			switch (tipoBusqueda) {
+				case 1:
+					parametros.put("INICIO", fechaInicio);
+					parametros.put("FIN", fechaFin);
+				break;
+				case 2:
+					parametros.put("ID", idBusqueda);
+				break;
+			}
+			parametros.put("COMPROBANTE", tipoSeleccionado);
 			loadLazymodelComprobantes();
+		}
 		Js.update("mensajes");
 	}
 	
 	public boolean validarEntradas(){
 		boolean ejecutar = true;
-		if(fechaEmision == null){
-			Message.addError(null, "No ha ingresado fecha de emisión !!");
-			ejecutar = false;
-		}
 		if(tipoSeleccionado == -1){
 			Message.addError(null, "No ha seleccionado tipo de comprobante !!");
 			ejecutar = false;
 		}
+		switch (tipoBusqueda) {
+			case 1:
+			if(fechaInicio == null){
+				Message.addError(null, "No ha ingresado fecha de inicio !!");
+				ejecutar = false;
+			}
+			if(fechaFin == null){
+				Message.addError(null, "No ha ingresado fecha de fin !!");
+				ejecutar = false;
+			}
+			if(fechaInicio !=null && fechaFin != null){
+				if(fechaFin.before(fechaInicio)){
+					Message.addError(null, "Fecha fin debe ser mayor que fecha inicio !!");
+					ejecutar = false;
+				}
+			}
+			break;
+			
+			case 2:
+			if(idBusqueda.getSerie().trim().equals("")){
+				Message.addError(null, "No ha ingresado serie de comprobante !!");
+				ejecutar = false;
+			}
+			if(idBusqueda.getNumero().trim().equals("")){
+				Message.addError(null, "No ha ingresado número de comprobante !!");
+				ejecutar = false;
+			}	
+			break;
+		}
+		
+		
 		return ejecutar;
 	}
 	
 	public void generarTxt(){
 		if(validarEntradas()){
-			List<ComprobantePk> pks = ComprobanteDao.getInstance().listarComprobantes(fechaEmision, tipoSeleccionado);
+			List<ComprobantePk> pks = ComprobanteDao.getInstance().listarComprobantes(parametros,tipoBusqueda);
 			if(GenerarTxt.getInstance().toTxt(pks, tipoSeleccionado))
 				Message.addInfo(null, "Archivos enviados correctamente al Facturador-SUNAT !!");
 			else
 				Message.addError(null, "No se ha generado los archivos !!");	
 		}
 		Js.update("mensajes");
+	}
+	
+	public void verificarBusqueda(){
+		Js.update("busqueda");
 	}
 	
 	public Usuario getUser() {
@@ -175,12 +225,22 @@ public class ComprobanteController implements Serializable {
 		this.modelComprobante = modelComprobante;
 	}
 	
-	public Date getFechaEmision() {
-		return fechaEmision;
+	public Date getFechaInicio() {
+		return fechaInicio;
 	}
-	public void setFechaEmision(Date fechaEmision) {
-		this.fechaEmision = fechaEmision;
+
+	public void setFechaInicio(Date fechaInicio) {
+		this.fechaInicio = fechaInicio;
 	}
+
+	public Date getFechaFin() {
+		return fechaFin;
+	}
+
+	public void setFechaFin(Date fechaFin) {
+		this.fechaFin = fechaFin;
+	}
+
 	public List<TipoComprobante> getTipos() {
 		return tipos;
 	}
@@ -204,6 +264,22 @@ public class ComprobanteController implements Serializable {
 	}
 	public void setDetalle(DetalleComprobanteController detalle) {
 		this.detalle = detalle;
+	}
+
+	public int getTipoBusqueda() {
+		return tipoBusqueda;
+	}
+
+	public void setTipoBusqueda(int tipoBusqueda) {
+		this.tipoBusqueda = tipoBusqueda;
+	}
+
+	public ComprobantePk getIdBusqueda() {
+		return idBusqueda;
+	}
+
+	public void setIdBusqueda(ComprobantePk idBusqueda) {
+		this.idBusqueda = idBusqueda;
 	}	
 	
 }

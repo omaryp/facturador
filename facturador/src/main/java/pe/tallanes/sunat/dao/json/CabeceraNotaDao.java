@@ -43,7 +43,7 @@ public class CabeceraNotaDao {
 			sql.append("Inner Join  TipoComprobante C on C.Cod_Comprobante = B.Cod_ComprobanteC ");
 			sql.append("Where A.Serie = ? and A.Numero = ? ");
 			ps = con.prepareStatement(sql.toString());
-			ps.setInt(1, id.getSerie());
+			ps.setString(1, id.getSerie());
 			ps.setString(2, id.getNumero());
 			rs =ps.executeQuery();
 			if(rs.next()){
@@ -54,7 +54,7 @@ public class CabeceraNotaDao {
 				cabecera.setTipDocAfectado(rs.getString("Cod_Sunat"));
 				int codComprobante = Integer.parseInt(rs.getString("Cod_ComprobanteC"));
 				StringBuilder serComprobante = new StringBuilder();
-				serComprobante.append(Cadena.formatoSerie(rs.getInt("SerieC"), codComprobante));
+				serComprobante.append(rs.getString("SerieC"));
 				serComprobante.append("-");
 				serComprobante.append(Cadena.completar(rs.getString("NumeroC"), 8,"0",false));
 				cabecera.setNumDocAfectado(serComprobante.toString());
@@ -112,13 +112,13 @@ public class CabeceraNotaDao {
 			sql.append("From Comprobante_Modifica ");
 			sql.append("Where Serie = ? and Numero = ? and Cod_Comprobante = ?");
 			ps = con.prepareStatement(sql.toString());
-			ps.setInt(1, id.getSerie());
+			ps.setString(1, id.getSerie());
 			ps.setString(2, id.getNumero());
 			ps.setString(3, id.getCodigoComprobante());
 			rs =ps.executeQuery();
 			if(rs.next()){
 				modifica = new ComprobantePk();
-				modifica.setSerie(rs.getInt("SerieC"));
+				modifica.setSerie(rs.getString("SerieC"));
 				modifica.setNumero(rs.getString("NumeroC"));
 				modifica.setCodigoComprobante(rs.getString("Cod_ComprobanteC"));
 			}

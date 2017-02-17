@@ -35,13 +35,13 @@ public class CabeceraDao {
 		Cabecera cabecera = null;
 		try {
 			con = Conexiones.getConexion();
-			sql.append("Select '01' tipOpe,A.FechaEmision,'0' codLocal,'' tipDoc ,A.RUC numDoc ,A.Cliente,");
+			sql.append("Select '01' tipOpe,A.FechaEmision,'0' codLocal,'' tipDoc ,coalesce(A.RUC,'00000000') numDoc ,REPLACE(A.Cliente,'&',' ') Cliente,");
 			sql.append("A.Moneda,'0.00' dsctoGlobal,'0.00' otroCargo,'0.00' totDscto,cast(A.ValorVenta as varchar(15)) ValorVenta,cast(A.Impuesto as varchar(15)) Impuesto,");
 			sql.append("'0.00' mtoIsc,'0.00' otroTrib,cast((A.ValorVenta+A.Impuesto) as varchar(15)) total ,A.Cod_Comprobante ");
 			sql.append("From Comprobante A ");
 			sql.append("Where A.Serie = ? and A.Numero = ? ");
 			ps = con.prepareStatement(sql.toString());
-			ps.setInt(1, id.getSerie());
+			ps.setString(1, id.getSerie());
 			ps.setString(2, id.getNumero());
 			rs =ps.executeQuery();
 			if(rs.next()){
@@ -50,16 +50,19 @@ public class CabeceraDao {
 				cabecera.setFecEmision(Cadena.formatoFecha(rs.getDate("FechaEmision")));
 				cabecera.setCodLocalEmisor(rs.getString("codLocal"));
 				int codComprobante = Integer.parseInt(rs.getString("Cod_Comprobante")); 
+				cabecera.setNumDocUsuario(rs.getString("numDoc"));
 				switch (codComprobante) {
 					case 1:
-						cabecera.setTipDocUsuario(Documento.DOC_NACIONAL_DE_IDENTIDAD.value());
+						if(cabecera.getNumDocUsuario().equals("0"))
+							cabecera.setTipDocUsuario("0");
+						else
+							cabecera.setTipDocUsuario(Documento.DOC_NACIONAL_DE_IDENTIDAD.value());
 						break;
 					case 2:
 						cabecera.setTipDocUsuario(Documento.REG_UNICO_DE_CONTRIBUYENTES.value());
 						break;
 				}
-				cabecera.setNumDocUsuario(rs.getString("numDoc"));
-				cabecera.setRznSocialUsuario(rs.getString("Cliente"));
+				cabecera.setRznSocialUsuario((rs.getString("Cliente").trim().equals(""))?"varios":rs.getString("Cliente"));
 				cabecera.setTipMoneda((rs.getString("Moneda").equals("01"))?Moneda.SOLES.value():Moneda.DOLARES.value());
 				cabecera.setSumDsctoGlobal(rs.getString("dsctoGlobal"));
 				cabecera.setSumOtrosCargos(rs.getString("otroCargo"));

@@ -31,6 +31,7 @@ public class Params {
     static {
     	try {
     		configuracion = new Properties();
+    		LOGGER.info(System.getProperty("user.dir"));
             configuracion.load(new FileInputStream(System.getProperty("user.dir") + System.getProperty("file.separator")+"facturador.properties"));
 		} catch (Exception e) {
 			LOGGER.error(e.getMessage());

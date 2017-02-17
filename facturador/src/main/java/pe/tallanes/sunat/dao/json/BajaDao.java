@@ -77,7 +77,7 @@ public class BajaDao {
 			while(rs.next()){
 				Comprobante comprobante = new Comprobante();
 				ComprobantePk id = new ComprobantePk();
-				id.setSerie(rs.getInt("Serie"));
+				id.setSerie(rs.getString("Serie"));
 				id.setNumero(rs.getString("Numero"));
 				comprobante.setDesSerie(rs.getString("Descri"));
 				comprobante.setRuc(rs.getString("RUC"));

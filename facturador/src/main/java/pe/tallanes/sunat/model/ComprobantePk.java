@@ -8,20 +8,21 @@ public class ComprobantePk implements Serializable{
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-	private int serie;
+	private String serie;
 	private String numero;
 	private String codigoComprobante;
 
 	public ComprobantePk(){}
 	
-	public int getSerie() {
+	
+	public String getSerie() {
 		return serie;
 	}
-	
-	public void setSerie(int serie) {
+
+	public void setSerie(String serie) {
 		this.serie = serie;
 	}
-	
+
 	public String getNumero() {
 		return numero;
 	}

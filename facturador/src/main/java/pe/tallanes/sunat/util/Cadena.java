@@ -2,6 +2,7 @@ package pe.tallanes.sunat.util;
 
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 
 /**
  *
@@ -30,6 +31,11 @@ public class Cadena {
 		SimpleDateFormat formato = new SimpleDateFormat("yyyy-MM-dd");
 		return formato.format(pFecha);
 	}
+	
+	public static String formatoDate(Date pFecha) {
+		SimpleDateFormat formato = new SimpleDateFormat("yyyyMMdd");
+		return formato.format(pFecha);
+	}
 
 	public static String formatoSerie(int serie,int tipoComprobante) {
 		StringBuilder ser = new StringBuilder();
@@ -45,6 +51,16 @@ public class Cadena {
 		}
 		ser.append(completar(String.valueOf(serie), 3, "0", false));
 		return ser.toString();
+	}
+	
+	public static int[] separarFecha(Date fecha){
+		int [] dateInt = new int[3];
+		Calendar calendario = Calendar.getInstance();
+		calendario.setTime(fecha); // fecha es el Date de antes.
+		dateInt[0] = calendario.get(Calendar.YEAR);
+		dateInt[1] = calendario.get(Calendar.MONTH)+1;
+		dateInt[2] = calendario.get(Calendar.DAY_OF_MONTH);
+		return dateInt;
 	}
 
 }

@@ -43,7 +43,7 @@ public class DetalleDao {
 			sql.append("inner join IGV C on C.Activado = 1 ");
 		    sql.append("Where A.Serie = ? and A.Numero = ? and A.Cod_Comprobante = ?");
 			ps = con.prepareStatement(sql.toString());
-			ps.setInt(1, id.getSerie());
+			ps.setString(1, id.getSerie());
 			ps.setString(2, id.getNumero());
 			ps.setString(3, id.getCodigoComprobante());
 			rs =ps.executeQuery();
