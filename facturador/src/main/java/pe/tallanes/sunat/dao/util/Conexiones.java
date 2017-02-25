@@ -5,7 +5,11 @@
  */
 package pe.tallanes.sunat.dao.util;
 
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.SQLException;
+
+import javax.naming.InitialContext;
+import javax.sql.DataSource;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -15,6 +19,7 @@ public final class Conexiones {
 	private static final Logger LOGGER = LoggerFactory.getLogger(Conexiones.class);
 
 	private static ConnectionPoolImpl pool;
+	private static DataSource dsSQLite;
 
 	private Conexiones() {
 	}
@@ -24,8 +29,18 @@ public final class Conexiones {
 			if (pool == null) {
 				pool = new ConnectionPoolImpl("com.microsoft.sqlserver.jdbc.SQLServerDriver",sUsuario, sPassword);
 			}
+			iniciarDataSource();
 		} catch (Exception e) {
 			LOGGER.error("Error al crear pool de conexiones",e);
+		}
+	}
+	
+	public static void iniciarDataSource(){
+		try {			
+			InitialContext ctx = new InitialContext();
+			dsSQLite = (DataSource)ctx.lookup("java:comp/env/jdbc/__Facturador");
+		} catch (Exception e) {
+			LOGGER.error("Error al inciar DataSource SQLite",e);
 		}
 	}
 
@@ -38,6 +53,10 @@ public final class Conexiones {
 
 	public static Connection getConexion() throws SQLException {
 		return pool.getConnection();
+	}
+	
+	public static Connection getConexionSQLite() throws SQLException {
+		return dsSQLite.getConnection();
 	}
 	
 }

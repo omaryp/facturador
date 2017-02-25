@@ -7,7 +7,7 @@ import java.util.Date;
 import javax.annotation.PostConstruct;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
-import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 
 import org.primefaces.model.menu.DefaultMenuItem;
 import org.primefaces.model.menu.DefaultMenuModel;
@@ -22,7 +22,7 @@ import pe.tallanes.sunat.model.Usuario;
  *
  */
 @ManagedBean
-@SessionScoped
+@ViewScoped
 public class GenerarMenuController implements Serializable {
 
 	private static final Logger LOGGER = LoggerFactory.getLogger(GenerarMenuController.class);
@@ -51,14 +51,20 @@ public class GenerarMenuController implements Serializable {
 	}
 
 	public MenuModel getMenuModelBean() {
-		DefaultMenuItem menuItem = null;
 		if (menuModelBean == null) {
 			menuModelBean = new DefaultMenuModel();
-			menuItem = new DefaultMenuItem("Comprobantes");
-			menuItem.setUrl("comprobantes.do");
-			String id = "menu01";
-			menuItem.setId(id);
+			DefaultMenuItem menuItem = new DefaultMenuItem("Inicio");
+			menuItem.setUrl("inicio.do");
+			menuItem.setId("menu");
 			menuModelBean.addElement(menuItem);
+			DefaultMenuItem menuItem1 = new DefaultMenuItem("Comprobantes");
+			menuItem1.setUrl("comprobantes.do");
+			menuItem1.setId("menu01");
+			menuModelBean.addElement(menuItem1);
+			DefaultMenuItem menuItem2 = new DefaultMenuItem("Consulta Facturador Sunat");
+			menuItem2.setUrl("consulta.do");
+			menuItem2.setId("menu02");
+			menuModelBean.addElement(menuItem2);
 		}
 		return menuModelBean;
 	}

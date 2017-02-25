@@ -1,0 +1,83 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	template="/plantilla/plantilla.xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:p="http://primefaces.org/ui"
+	xmlns:f="http://java.sun.com/jsf/core">
+	<ui:define name="titulo">
+    	Comprobantes enviados a SUNAT 
+    </ui:define>
+	<ui:define name="cuerpo">
+		<p:panel header="Comprobantes FACTURADOR - SUNAT"
+			styleClass="margen sin_borde">
+			<h:form id="frm_consulta" prependId="false">
+				<div class="margen row">
+					<p:outputLabel value="Estado >>> "
+						styleClass="negrita espacio_comp one tenth align-right" />
+					<p:selectOneRadio value="#{consultaFsController.estado}" styleClass="one fifth">
+						<f:selectItem itemLabel="Enviados" itemValue="1" />
+						<f:selectItem itemLabel="No Enviados" itemValue="2" />
+						<p:ajax listener="#{consultaFsController.seleccionarEstado}"
+							event="change" update="tbl_comprobantesFs,ver_hist" />
+					</p:selectOneRadio>
+				</div>
+				<div class="margen row">
+					<p:outputLabel value="Serie :"
+						styleClass="negrita espacio_comp one tenth align-right" />
+					<p:inputText value="#{consultaFsController.serie}"
+						styleClass="one seventh" />
+					<p:outputLabel value="Número :"
+						styleClass="negrita espacio_comp one tenth align-right" />
+					<p:inputText value="#{consultaFsController.numero}"
+						styleClass="one seventh" />
+					<h:panelGroup id = "ver_hist">
+						<h:panelGroup  rendered="#{consultaFsController.estado == 1}">
+						<p:selectBooleanCheckbox value="#{consultaFsController.historico}" styleClass="negrita espacio_comp one twelfth align-right" />
+        				<p:outputLabel value="[Verificar histórico]" styleClass="negrita espacio_comp one seventh"/>
+        				</h:panelGroup>
+					</h:panelGroup>
+				</div>
+				<div class="margen row">
+					<p:commandButton icon="ui-icon-plus" title="cargar"
+						actionListener="#{consultaFsController.cargarComprobantes}"
+						value="Cargar" styleClass="one tenth"  update="tbl_comprobantesFs"/>
+				</div>
+				<div class="margen">
+					<p:dataTable id="tbl_comprobantesFs" paginator="true" lazy="true"
+						rows="10" paginatorPosition="bottom"
+						emptyMessage="No hay coincidencias !!" var="comp"
+						value="#{consultaFsController.modelComprobanteFs}"
+						paginatorTemplate="{RowsPerPageDropdown} {FirstPageLink} {PreviousPageLink} {CurrentPageReport} {NextPageLink} {LastPageLink}">
+						<p:column headerText="Comprobante">
+							<h:outputText value="#{comp.id.numeroDocumento}" />
+						</p:column>
+						<p:column headerText="Carga">
+							<h:outputText value="#{comp.fechaCarga}">
+								<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+							</h:outputText>
+						</p:column>
+						<p:column headerText="Generado">
+							<h:outputText value="#{comp.fechaGenerado}">
+								<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+							</h:outputText>
+						</p:column>
+						<p:column headerText="Envío">
+							<h:outputText value="#{comp.fechaEnvio}">
+								<f:convertDateTime type="date" pattern="dd/MM/yyyy" />
+							</h:outputText>
+						</p:column>
+						<p:column headerText="Observaciones">
+							<h:outputText value="#{comp.observaciones}" />
+						</p:column>
+					</p:dataTable>
+				</div>
+				<div class="margen">
+					<p:commandButton value="Limpiar bandeja facturador"
+						action="#{consultaFsController.limpiarBandeja}" icon="ui-icon-check" />
+				</div>
+			</h:form>
+		</p:panel>
+	</ui:define>
+</ui:composition>

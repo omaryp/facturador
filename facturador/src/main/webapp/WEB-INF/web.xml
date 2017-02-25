@@ -42,6 +42,7 @@
 		<dispatcher>FORWARD</dispatcher>
 		<dispatcher>REQUEST</dispatcher>
 	</filter-mapping>
+	
 	<!--Cargando el Contexto del framework Spring -->
 	<listener>
 		<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
@@ -54,6 +55,10 @@
 		<description>listener BD</description>
         <listener-class>pe.tallanes.sunat.util.listener.ListenerApp</listener-class>
 	</listener>
+	<resource-ref>
+		<res-ref-name>jdbc/__Facturador</res-ref-name>
+		<res-type>javax.sql.DataSource</res-type>
+	</resource-ref>
 	<welcome-file-list>
 		<welcome-file>index.jsp</welcome-file>
 	</welcome-file-list>

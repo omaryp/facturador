@@ -22,6 +22,7 @@ public class Params {
     public static String user = null;
     public static String pass = null;
     public static String ruta = null;
+    public static String rutaDestino = null;
     public static String ruc = null;
     public static String razonSocial = null;
     public static String direccion = null;
@@ -48,6 +49,7 @@ public class Params {
         user = getProperty("USER");
         pass = getProperty("PASS");
         ruta = getProperty("RUTA");
+        rutaDestino = getProperty("RUTA_ENVIADOS");
         Map<String,Object> datos_empresa = DatosEmpresaDao.getInstance().getDatosEmpresa();
         if(datos_empresa != null){
         	ruc = datos_empresa.get("RUC").toString();
